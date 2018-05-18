@@ -16,6 +16,7 @@ import static my.tutorials.behaviorparameterization.helper.TransactionHelper.map
 import static my.tutorials.behaviorparameterization.helper.TransactionHelper.printTransactionsDetailsWithConsumer;
 import static my.tutorials.behaviorparameterization.helper.TransactionHelper.printTransactionsWithConsumer;
 import static my.tutorials.behaviorparameterization.stratergy.filter.transaction.impl.TransactionConsumerImpl.printTransactionDetails;
+import static my.tutorials.behaviorparameterization.stratergy.filter.transaction.impl.TransactionConsumerImpl.printTransactionWithCreditAndSourceConsumer;
 import static my.tutorials.behaviorparameterization.stratergy.filter.transaction.impl.TransactionConsumerImpl.printTransactionsGreaterThanAmountConsumer;
 import static my.tutorials.behaviorparameterization.stratergy.filter.transaction.impl.TransactionFunctionImpl.mapTransaction2TransactionDetails;
 import static my.tutorials.behaviorparameterization.stratergy.filter.transaction.impl.TransactionPredicateImpl.amountCreditAndSourcePredicate;
@@ -34,9 +35,9 @@ public class TransactionImplTest {
     }
 
     @Test
-    public void testTransactionsWithPredicate() {
+    public void testTransactionsWithPredicate1() {
         List<Transaction> filteredTransactions = filterTransactionsWithPredicate(transactionList,
-                t -> t.getAmount() > 3000d);
+                amountGreaterThanPredicate(3000d));
 
         for (Transaction filteredTransaction : filteredTransactions) {
             assertThat(filteredTransaction.getAmount()).isGreaterThan(3000d);
@@ -46,7 +47,7 @@ public class TransactionImplTest {
     @Test
     public void testTransactionsWithPredicate2() {
         List<Transaction> filteredTransactions = filterTransactionsWithPredicate(transactionList,
-                t -> (t.getAmount() > 3000d) && t.getType() == TxnType.CREDIT && t.getSource().equalsIgnoreCase("X"));
+                amountCreditAndSourcePredicate(3000d));
 
         for (Transaction filteredTransaction : filteredTransactions) {
             assertThat(filteredTransaction.getAmount()).isGreaterThan(3000d);
@@ -57,15 +58,12 @@ public class TransactionImplTest {
 
     @Test
     public void testTransactionsWithConsumer1(){
-        printTransactionsWithConsumer(transactionList, t -> {if(t.getAmount() > 30000) System.out.println(t.toString());});
+        printTransactionsWithConsumer(transactionList, printTransactionsGreaterThanAmountConsumer(3000d));
     }
 
     @Test
     public void testTransactionsWithConsumer2(){
-        printTransactionsWithConsumer(transactionList, t -> {
-            if (t.getAmount() > 30000d && t.getType() == TxnType.CREDIT && t.getSource().equalsIgnoreCase("X"))
-                System.out.println(t.toString());
-        });
+        printTransactionsWithConsumer(transactionList, printTransactionWithCreditAndSourceConsumer(3000d));
     }
 
     @Test

@@ -8,15 +8,15 @@ import java.util.function.Consumer;
 
 public class TransactionConsumerImpl {
 
-    public static Consumer<Transaction> printTransactionsGreaterThanAmountConsumer() {
+    public static Consumer<Transaction> printTransactionsGreaterThanAmountConsumer(Double amount) {
 
-        return t -> {if(t.getAmount() > 3000d) System.out.println(t.toString());};
+        return t -> {if(t.getAmount() > amount) System.out.println(t.toString());};
     }
 
-    public static Consumer<Transaction> printTransactionWithCreditAndSourceConsumer() {
+    public static Consumer<Transaction> printTransactionWithCreditAndSourceConsumer(Double amount) {
 
         return t -> {
-            if (t.getAmount() > 3000d && t.getType() == TxnType.CREDIT && t.getSource().equalsIgnoreCase("X"))
+            if (t.getAmount() > amount && t.getType() == TxnType.CREDIT && t.getSource().equalsIgnoreCase("X"))
                 System.out.println(t.toString());
         };
     }
